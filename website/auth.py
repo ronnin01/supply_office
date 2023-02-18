@@ -54,6 +54,7 @@ def signup():
         elif ut_pic and allowed_file(ut_pic.filename):
             
             filename = secure_filename(ut_pic.filename)
+            # mau ni ako concern sir nga wrong daw ang url folder
             # ut_pic.save(os.path.join(url_for('static', filename='uploads'), filename))
 
             new_user = UserTable(
