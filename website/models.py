@@ -33,3 +33,12 @@ class UserTable(db.Model):
     UT_Designation = db.Column(db.String)
     UT_Department = db.Column(db.String)
 
+class Category(db.Model):
+    Cat_ID = db.Column(db.Integer, primary_key=True)
+    Cat_Name = db.Column(db.String)
+    Cat_Desc = db.Column(db.String)
+
+class Department(db.Model):
+    Dept_No = db.Column(db.Integer, primary_key=True)
+    Dept_Name = db.Column(db.String)
+    Dept_Desc = db.Column(db.String)

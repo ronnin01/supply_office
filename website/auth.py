@@ -18,15 +18,16 @@ def signin():
 
         if(user):
             if(user.UT_Password == password):
-                return redirect(url_for('auth.student_index_page'))
+                if user.UT_UserType == "Student":
+                    return redirect(url_for('auth.student_index_page'))
+                else: 
+                    return redirect(url_for('auth.admin_item_entry'))
             else:
                 flash("Incorrect Password", category='error')
         else:
             flash('Incorrect Username', category='error')
 
-        return redirect(url_for('auth.admin_item_entry'))
-    else:
-        return render_template('signin.html')
+    return render_template('signin.html')
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -36,16 +37,18 @@ def allowed_file(filename):
 def signup():
     if request.method == "POST":
 
-        ut_idno = request.form['ut_idno']
+        ut_idno = request.form.get('ut_idno')
         ut_pic = request.files.get('ut_pic')
-        ut_firstname = request.form['ut_firstname']
-        ut_lastname = request.form['ut_lastname']
-        ut_mi = request.form['ut_mi']
-        ut_email = request.form['ut_email']
-        ut_contact = request.form['ut_contact']
-        ut_username = request.form['ut_username']
-        ut_password = request.form['ut_password']
-        ut_confirm_password = request.form['ut_confirm_password']
+        ut_firstname = request.form.get('ut_firstname')
+        ut_lastname = request.form.get('ut_lastname')
+        ut_mi = request.form.get('ut_mi')
+        ut_designation = request.form.get('ut_designation')
+        ut_department = request.form.get('ut_department')
+        ut_email = request.form.get('ut_email')
+        ut_contact = request.form.get('ut_contact')
+        ut_username = request.form.get('ut_username')
+        ut_password = request.form.get('ut_password')
+        ut_confirm_password = request.form.get('ut_confirm_password')
 
         if len(ut_password) < 6:
             flash('Password must be 6 above length', category='error')
@@ -58,25 +61,25 @@ def signup():
             # ut_pic.save(os.path.join(url_for('static', filename='uploads'), filename))
 
             new_user = UserTable(
-                UT_UserID = "12350982341",
                 UT_IDNo = ut_idno,
-                UT_FirstName = ut_firstname,
                 UT_LastName = ut_lastname,
+                UT_FirstName = ut_firstname,
                 UT_MI = ut_mi,
                 UT_Contact = ut_contact,
                 UT_Email = ut_email,
-                UT_Pic = "Profile.png",
+                UT_Pic = filename,
                 UT_Username = ut_username,
                 UT_Password = ut_password,
                 UT_UserType = "Student",
-                UT_Designation = "Student",
-                UT_Department = "COT",
+                UT_Designation = ut_designation,
+                UT_Department = ut_department
             )
             db.session.add(new_user)
             db.session.commit()
 
-            return redirect(url_for('auth.signin'))
+            flash("You have been registered.")
 
+            return redirect(url_for('auth.signin'))
         else:
             flash("Image must be png or jpg.", category='error')
 
