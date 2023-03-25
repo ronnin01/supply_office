@@ -1,80 +1,204 @@
-{%extends "layouts/admin.html"%}
+{%if session['user_type'] == 'Admin'%}
+    {%extends "layouts/admin.html"%}
+{%else%}
+    {%extends "layouts/owner.html"%}
+{%endif%}
+{% block title %}Item{% endblock %}
 {%block content%}
-    <section>
-        <div class="container p-3">
-            <div class="card border-top border-0 border-danger shadow-lg">
-                <div class="card-body">
-                    <div class="text-start my-2">
-                        <h2>ITEM ENTRY</h2>
+
+<!-- MODALS -->
+    <!-- Modal For New Stock-->
+    <div class="modal fade" id="edit-stocks" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <!--<div id="add-category" class="modal fade" role="dialog">-->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Stock(s)</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <!--<i class="fa-sharp fa-solid fa-circle-xmark"></i>-->
+
+                        </button>
                     </div>
-                    <hr>
-                    <div class="my-2">
-                        <form method="POST">
-                            <div class="row">
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Item No.</label>
-                                    <input type="text" class="form-control" name="is_itemno" placeholder="Item No">
+                    <form method="POST" action="{{url_for('auth.editstock')}}">
+                        <div class="modal-body">
+                        
+                          <div class="container">
+                              <div class = "row">
+                                  <div class="col">
+                                       <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <input class="form-control" hidden id="txtStat" name="txtStat" style="border: 0;">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <input class="form-control" hidden id="txtNo" name="txtNo" style="border: 0;">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    
+                                                    <div class="col">
+                                                        <textarea class="form-control" readonly id="txtName" name="txtName" style="border: 0; height: 100px; background-color: white;"> </textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                    <label for="txtCstock" class="form-label">Current Stock(s):</label>
+                                                    <input class="form-control" disabled id="txtCstock" name="txtCstock" style="width: 100px">
+                                                    <br/>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="txtstock" class="form-label">Quantity to Add/Delete:</label>
+                                                        <input id="txtstock" name = "txtstock" type="number" value="1" min="1" max="50" class="form-control" style="width: 100px;">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                             </div>
+                                          </div>
+                                      </div>
                                 </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Serial No.</label>
-                                    <input type="text" class="form-control" placeholder="Serial No">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Item Name</label>
-                                    <input type="text" class="form-control" placeholder="Item Name">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Item Description</label>
-                                    <input type="text" class="form-control" placeholder="Item Description">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Category No.</label>
-                                    <input type="text" class="form-control" placeholder="Category No">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Brand</label>
-                                    <input type="text" class="form-control" placeholder="Brand">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Model</label>
-                                    <input type="text" class="form-control" placeholder="Model">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Location</label>
-                                    <input type="text" class="form-control" placeholder="Location">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Department</label>
-                                    <input type="text" class="form-control" placeholder="Department">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Owner</label>
-                                    <input type="text" class="form-control" placeholder="Owner">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Pic</label>
-                                    <input type="text" class="form-control" placeholder="Pic">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">BegStock</label>
-                                    <input type="text" class="form-control" placeholder="BegStock">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">Unit</label>
-                                    <input type="text" class="form-control" placeholder="Unit">
-                                </div>
-                                <div class="col-6 my-2">
-                                    <label class="form-label">User No.</label>
-                                    <input type="text" class="form-control" placeholder="UserNo">
-                                </div>
-                            </div>
-                            <div class="d-grid my-4">
-                                <button type="submit" class="btn btn-danger">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+                              </div>
+                          </div>
+
+                        <div class="modal-footer">
+                          
+                          <!--<button href="/addcat/" type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="addCat()">
+                            Save changes
+                          </button>
+                        -->
+                        
+                            <button type="submit" class="btn btn-success btnAdd" >Add Stock(s)</button>
+                            <button type="submit" class="btn btn-danger btnDel" >Delete Stock(s)</button>
+                         </div>
+
+
+                      </form>
+                  </div>
+            </div>
+      </div>                                   
+                                                
+      <!-- End of Modal for New Category -->
+
+
+
+<div class = "row">
+
+    <div class="container-fluid-p2 mt-2">
+        <div class="card border-top border-0 border-danger shadow-lg">
+            <div class="card-body">
+                <div class="text-start my-2">
+                    <h4>ITEM LIST</h4>
+                </div>
+                <hr>
+                <div class="my-2 text-start">
+                    <a href="/admin/item/add"><button class="btn btn-sm btn-primary" ><i class="bi bi-plus-circle"></i>   New Item</button></a> 
+                </div>
+                <div class="my-2" style="overflow-x: scroll;">
+                    
+                    <table class="table table-bordered table-condensed table-hover main-panel">
+                        <style rel = 'stylesheet' type="text/css">
+                            tbody td {font-size: 85%;}
+                            thead {font-size: 90%;}
+                            
+                            .main-panel { position:relative}
+                        </style>
+                    
+                        <thead>
+                            <tr class="text-center">
+                                <th> </th>
+                                <th hidden = "true">Item #</th>
+                                <th>Action</th>
+                                
+                                <th>Pic</th>
+                               
+                                <th>Item Name</th>
+                                <th>Brand</th>
+                                
+                                <th>Category</th>
+                                <th>Location</th>
+                                
+                                <th>Owner</th>               
+                                <th>Unreturned</th>
+                                <th>Stock(s)</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {%if items %}
+                                {%for item in items%}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    <td hidden = "true">{{item.IS_ItemNo}}</td>
+                                    <td class="text-center">
+                                        <a href="/admin/items/update/{{item.IS_ItemNo}}" title="Edit Item" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="/admin/items/delete/{{item.IS_ItemNo}}" onclick=" return confirm('Are you sure you want to Delete the item?')" title = "Delete Item" class="btn btn-danger btn-sm"><i class="fa-sharp fa-solid fa-trash"></i></a>
+                                        <a href="" title = "Edit Stock(s)" class="btn btn-success btn-sm btnStock" data-bs-toggle="modal" data-bs-target="#edit-stocks"><i class="bi bi-box-fill"></i></a>
+                                        <a href="/admin/items/damage/{{item.IS_ItemNo}}" onclick=" return confirm('Are you sure you want to trait this item as damage?')" title = "Surrender as damage" class="btn btn-danger btn-sm"><i class="bi bi-lightbulb-off-fill"></i></a>
+                                    </td>
+                                    
+                                    <td class="text-center">
+                                        <img class="img-thumbnail border-0" width="35px" height="30px" src="{{url_for('static', filename='uploads/')}}{{item.IS_Pic}}" width="35px" alt="">
+                                    </td>
+                                    
+                                    <td>{{item.IS_ItemName}}</td>
+                                    
+                                    <td>{{item.Br_BrandName}}</td>
+                                    
+                                    <td>{{item.Cat_Name}}</td>
+                                    <td>{{item.Loc_Name}}</td>
+                                    
+                                    <td>{{item.UT_LastName + ', ' + item.UT_FirstName}}</td>
+                                    <td class="text-center"> {{item.BorStock}}</td>
+                                    <td class="text-center">{{(item.IS_BegStock + item.AddStock + item.RetStock) - (item.DelStock + item.BorStock)}}</td>
+                                    
+                                </tr>
+                                {%endfor%}
+                                
+                            {%else%}
+                                <tr class="text-center">
+                                    <td colspan="16">
+                                        <h3 class="fw-light">No Items</h3>
+                                    </td>
+                                </tr>
+                                
+                                
+                            {%endif%}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </section>
-{%endblock%}
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $(".btnStock").on('click',function(){
+            var currentRow =$(this).closest("tr");
+            var col2 = currentRow.find("td:eq(1)").text();
+            var col11 = currentRow.find("td:eq(10)").text();
+            var col5 = currentRow.find("td:eq(4)").text();
+            document.getElementById("txtNo").value = col2;
+            document.getElementById("txtName").value = col5;
+            document.getElementById("txtCstock").value = col11;
+        });
+        $(".btnAdd").on('click',function(){
+            document.getElementById("txtStat").value = "Add";
+        });
+        $(".btnDel").on('click',function(){
+            document.getElementById("txtStat").value = "Del";
+        });
+    });
+</script>
+
+    
+{% endblock %}

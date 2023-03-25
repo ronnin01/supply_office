@@ -1,0 +1,106 @@
+{%extends "layouts/admin.html"%} {% block title %}Item{% endblock %}
+{%block content%}
+    <div class="container-fluid">
+        <div class="vh-100 row align-items-center">
+            <div class="col">
+                <div class="row justify-content-center">
+                    <div class="col-11 col-md-8 col-lg-6 signup-animate">
+                        <div class="card shadow-lg" style="background: rgba(253, 250, 250, 0.8);">
+                            <div class="card-body">
+                                <div class="my-2 text-start">
+                                    <h3>Owner User Registration</h3>
+                                </div>
+                                <hr>
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                    {% if messages %}
+                                        {%for category, message in messages%}
+                                            {%if category == 'error'%}
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    {{message}}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {%else%}
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    {{message}}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                                <div class="my-2">
+                                    <form method="POST" action="{{url_for('auth.signup')}}" enctype="multipart/form-data">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label class="form-label">ID Number</label>
+                                                <input type="text" name="ut_idno" class="form-control" placeholder="ID Number">
+                                                <input type="hidden" name="ut_usertype" value="Owner">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="formFileMultiple" class="form-label">Upload your Profile Picture(PNG, JPG)</label>
+                                                <input class="form-control" name="ut_pic" type="file" id="formFileMultiple" multiple>
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <label class="form-label">Firstname</label>
+                                                <input type="text" name="ut_firstname" class="form-control" placeholder="Firstname">
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <label class="form-label">Lastname</label>
+                                                <input type="text" name="ut_lastname" class="form-control" placeholder="Lastname">
+                                            </div>
+                                            <div class="col-12 col-md-6 col-lg-4">
+                                                <label class="form-label">MI</label>
+                                                <input type="text" name="ut_mi" class="form-control" placeholder="MI">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Designation</label>
+                                                <select id="" name="ut_designation" class="form-select">
+                                                    <option>Select Designation</option>
+                                                    {%for designation in designations%}
+                                                    <option value="{{designation.Des_ID}}">{{designation.Des_Title}}</option>
+                                                    {%endfor%}
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Department</label>
+                                                <select id="" name="ut_department" class="form-select">
+                                                    <option>Select Department</option>
+                                                    {%for department in departments%}
+                                                    <option value="{{department.Dept_No}}">{{department.Dept_Name}}</option>
+                                                    {%endfor%}
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" name="ut_email" class="form-control" placeholder="Email">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Contact Number</label>
+                                                <input type="text" name="ut_contact" class="form-control" placeholder="Contact Number">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Username</label>
+                                                <input type="text" name="ut_username" class="form-control" placeholder="Username">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Password</label>
+                                                <input type="password" name="ut_password" class="form-control" placeholder="Password">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label class="form-label">Confirm Password</label>
+                                                <input type="password" name="ut_confirm_password" class="form-control" placeholder="Confirm Password">
+                                            </div>
+                                        </div>
+                                        <div class="my-4 d-grid">
+                                            <button class="btn btn-primary">Sign Up</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

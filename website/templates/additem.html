@@ -1,0 +1,588 @@
+{%if session['user_type'] == 'Admin'%}
+    {%extends "layouts/admin.html"%}
+{%else%}
+    {%extends "layouts/owner.html"%}
+{%endif%}
+{% block title %}Item{% endblock %}
+{%block content%}
+
+<!-- MODALS -->
+    <!-- Modal For New Category-->
+    <div class="modal fade" id="add-category" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <!--<div id="add-category" class="modal fade" role="dialog">-->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New Category</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <!--<i class="fa-sharp fa-solid fa-circle-xmark"></i>-->
+
+                        </button>
+                    </div>
+                    <form id="form-cat-add" method="POST">
+                        <div class="modal-body">
+                        
+                          <div class="container">
+                              <div class = "row">
+                                  <div class="col">
+                                       <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="txtAddCat" class="form-label">Category Title</label>
+                                                        <input type="text" class="form-control" required
+                                                        id="txtAddCat" name = "txtAddCat" placeholder="Enter New Category">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                  <div class="col">
+                                                  <textarea class="form-control" placeholder="Description" id="txtCatDesc" name="txtCatDesc" style="height: 100px"></textarea>
+                                                  <br/>
+                                                  </div>
+                                              </div>
+                                             </div>
+                                          </div>
+                                      </div>
+                                </div>
+                              </div>
+                          </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            Close
+                          </button>
+                          <!--<button href="/addcat/" type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="addCat()">
+                            Save changes
+                          </button>
+                        -->
+                        
+                          <button type="submit" class="btn btn-success" >Save Category</button>
+                         </div>
+
+
+                      </form>
+                  </div>
+            </div>
+      </div>                                   
+                                                
+      <!-- End of Modal for New Category -->
+    
+
+<!-- MODALS -->
+    <!-- Modal For New Brand-->
+    <div class="modal fade" id="add-brand" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <!--<div id="add-category" class="modal fade" role="dialog">-->
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Add New Brand</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <!--<i class="fa-sharp fa-solid fa-circle-xmark"></i>-->
+
+                      </button>
+                  </div>
+                  <form id="form-brand-add" method="POST">
+                      <div class="modal-body">
+                      
+                        <div class="container">
+                            <div class = "row">
+                                <div class="col">
+                                     <div class="card">
+                                          <div class="card-body">
+                                              <div class="row">
+                                                  <div class="col">
+                                                      <label for="txtAddBrand" class="form-label">Brand Name</label>
+                                                      <input type="text" class="form-control" required
+                                                      id="txtAddBrand" name = "txtAddBrand" placeholder="Enter New Brand">
+                                                  </div>
+                                              </div>
+                                              
+                                           </div>
+                                        </div>
+                                    </div>
+                              </div>
+                            </div>
+                        </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                        <!--<button href="/addcat/" type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="addCat()">
+                          Save changes
+                        </button>
+                      -->
+                      
+                        <button type="submit" class="btn btn-success" >Save Brand</button>
+                       </div>
+
+
+                    </form>
+                </div>
+          </div>
+    </div>                                   
+                                              
+    <!-- End of Modal for New Brand -->
+
+    <!-- MODALS -->
+    <!-- Modal For New Location-->
+    <div class="modal fade" id="add-location" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <!--<div id="add-category" class="modal fade" role="dialog">-->
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New Location</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <!--<i class="fa-sharp fa-solid fa-circle-xmark"></i>-->
+
+                        </button>
+                    </div>
+                    <form id="form-loc-add" method="POST">
+                        <div class="modal-body">
+                        
+                          <div class="container">
+                              <div class = "row">
+                                  <div class="col">
+                                       <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="txtAddLocName" class="form-label">Location Name</label>
+                                                        <input type="text" class="form-control" required
+                                                        id="txtAddLocName" name = "txtAddLocName" placeholder="Enter New Location">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                  <div class="col">
+                                                  <textarea class="form-control" placeholder="Description" id="txtLocDesc" name="txtLocDesc" style="height: 100px"></textarea>
+                                                  <br/>
+                                                  </div>
+                                              </div>
+                                             </div>
+                                          </div>
+                                      </div>
+                                </div>
+                              </div>
+                          </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            Close
+                          </button>
+                          <!--<button href="/addcat/" type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="addCat()">
+                            Save changes
+                          </button>
+                        -->
+                        
+                          <button type="submit" class="btn btn-success" >Save Location</button>
+                         </div>
+
+
+                      </form>
+                  </div>
+            </div>
+    </div>                                   
+                                                
+      <!-- End of Modal for New Location -->
+
+<!-- MODALS -->
+    <!-- Modal For New Category-->
+    <div class="modal fade" id="add-department" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <!--<div id="add-category" class="modal fade" role="dialog">-->
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Add New Department</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <!--<i class="fa-sharp fa-solid fa-circle-xmark"></i>-->
+
+                      </button>
+                  </div>
+                  <form id="form-dept-add" method="POST">
+                      <div class="modal-body">
+                      
+                        <div class="container">
+                            <div class = "row">
+                                <div class="col">
+                                     <div class="card">
+                                          <div class="card-body">
+                                              <div class="row">
+                                                  <div class="col">
+                                                      <label for="txtAddDeptName" class="form-label">Department Code</label>
+                                                      <input type="text" class="form-control" required
+                                                      id="txtAddDeptName" name = "txtAddDeptName" placeholder="Enter New Department">
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                <div class="col">
+                                                <textarea class="form-control" placeholder="Description" id="txtDeptDesc" name="txtDeptDesc" style="height: 100px"></textarea>
+                                                <br/>
+                                                </div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                              </div>
+                            </div>
+                        </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                        <!--<button href="/addcat/" type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="addCat()">
+                          Save changes
+                        </button>
+                      -->
+                      
+                        <button type="submit" class="btn btn-success" >Save Department</button>
+                       </div>
+
+
+                    </form>
+                </div>
+          </div>
+      </div>                                   
+                                              
+    <!-- End of Modal for New Category -->
+
+
+        
+        <div class="container-fluid">
+        
+        <!--<div class="modal fade" id="add-category" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div> -->
+            <div class="vh-100 row align-items-center">
+                <div class="col">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-md-8 col-lg-6 signup-animate">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <div class = "d-flex justify-content-between">
+                                        <div>
+                                            <h3>Add New Item</h3>
+                                        </div>
+                                        <div>
+                                            <a href="/admin/items/all"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                                            <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+                                            </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+        
+    
+                                    <form method="POST" enctype="multipart/form-data">
+                                        <div class="container">
+                                          <div class="row">
+                                            <div class="col">
+                                            <label for="txtSerial" class="form-label">Serial No.</label>
+                                            <input type="text" class="form-control"
+                                            id="txtSerial" name = "txtSerial" placeholder="Enter S/N" style="width:300px;">
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                <label for="txtItemName" class="form-label">Item Name</label>
+                                                <input type="text" class="form-control" required
+                                                id="txtItemName" name = "txtItemName" placeholder="Enter Item Name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                <textarea class="form-control" placeholder="Description" id="txtItemDesc" name="txtItemDesc" style="height: 100px"></textarea>
+                                                <br/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-4">
+                                              <label for="txtCategory" class="form-label">Category</label>
+                                              <a class="d-flex float-end" title="Add New Category" data-bs-toggle="modal" data-bs-target="#add-category" style="text-decoration: none;"><i class="bi bi-plus-circle-fill" style="font-style:normal;">   New</i></a>
+                                              <select class= form-select name="txtCategory" id="txtCategory">
+                                              </select>
+                                              
+                                              
+                                            </div>
+                                              
+                                            
+                                            <div class="col-md-4">
+                                              <label for="txtBrand" class="form-label">Brand</label>
+                                              <a class="d-flex float-end" title="Add New Brand" data-bs-toggle="modal" data-bs-target="#add-brand" style="text-decoration: none;"><i class="bi bi-plus-circle-fill" style="font-style:normal;">   New</i></a>
+                                              <select class= form-select name="txtBrand" id="txtBrand" >
+                                              </select>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <label for="txtModel" class="form-label">Model</label>
+                                                <input type="text" id="txtModel" name="txtModel" class="form-control">
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-6">
+                                              <label for="txtLocation" class="form-label">Location</label>
+                                              <a class="d-flex float-end" title="Add New Location" data-bs-toggle="modal" data-bs-target="#add-location" style="text-decoration: none;"><i class="bi bi-plus-circle-fill" style="font-style:normal;">   New</i></a>
+                                              <select class= form-select name="txtLocation" id="txtLocation" >
+                                              </select>
+                                            </div>
+    
+                                            <div class="col-md-6">
+                                                <label for="txtDepartment" class="form-label">Department</label>
+                                                <a class="d-flex float-end" title="Add New Department" data-bs-toggle="modal" data-bs-target="#add-department" style="text-decoration: none;"><i class="bi bi-plus-circle-fill" style="font-style:normal;">   New</i></a>
+                                                <select  class= form-select name="txtDepartment" id="txtDepartment">
+                                                </select>
+                                                
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                  <label for="txtOwner" class="form-label">Owner</label>
+                                              
+                                                  <select class= form-select name="txtOwner" id="txtOwner" >
+                                                    <option selected>Select Owner</option>
+                                                    {%for owner in users%}
+                                                    <option value="{{owner.UT_UserID}}">{{owner.UT_LastName + ', ' + owner.UT_FirstName}}</option>
+                                                    {%endfor%}
+                                                  </select>
+                                                </div>
+                                            </div>
+                                          <div class="row">
+                                      
+                                            <div class="col-md-4">
+                                              <label for="txtStocks" class="form-label">Initital Stock(s)</label>
+                                              <input type="number" id="txtStocks" name="txtStocks" value="1" min="1" class="form-control" style="width: 100px;">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtCondition" class="form-label">Condition</label>
+                                                <select class= form-select name="txtCondition" id="txtCondition" >
+                                                    <option selected>Select Condition</option>
+                                                    <option value="Good">Good</option>
+                                                    <option value="Defective">Defective</option>
+                                                    <option value="Not functional">Not functional</option>
+                                                  </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtUnit" class="form-label">Unit</label>
+                                                <select class= form-select name="txtUnit" id="txtUnit" >
+                                                  <option selected>Select Unit</option>
+                                                  <option value="box">Box</option>
+                                                  <option value="pc">Piece</option>
+                                                </select>
+                                            </div>
+                                          </div>
+                                          <br />
+                                          <div class="row">
+                                            <div class="col">
+                                              <label for="imgItem" class="form-label" >Upload Item image (PNG, JPG)</label>
+                                              <input class = "form-control" type="file" id="imgItem" name = "imgItem"
+                                              accept=".jpg, .jpeg, .png" style="width: 50%;">
+                                            </div>
+                  
+                                          </div>
+                         
+                  
+                                        <br />
+                                        <button type="submit" class="btn btn-success w-100">Submit</button>
+                                      </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+  function addCat() {
+    var x = document.getElementById("txtCategory");
+    var option = document.createElement("option");
+    option.text = document.getElementById("txtAddCat").value;
+    x.add(option);
+  }
+  function catName() {
+    var option = document.getElementById("txtAddCat").value;
+    return option
+  }
+
+  $(document).ready(function(){
+
+
+    function category(){
+      $.ajax({
+        type: 'GET',
+        headers: "application/json",
+        url: "http://127.0.0.1:5000/get/category/ajax",
+        success: function(data){
+          $('#txtCategory').append(`
+            <option value="" disabled selected id="opt_cat">Select Category</option>
+          `);
+          for(var i = 0; i < data.length; i++){
+            var category = data[i];
+
+            $('#txtCategory').append(`
+              <option value="${category.cat_id}" id="opt_cat">${category.cat_name}</option>
+            `);
+          }
+        }
+      });
+    }
+    category();
+
+    $(document).on('submit', '#form-cat-add', function(e){
+      e.preventDefault();
+
+      const form = document.getElementById('form-cat-add');
+      const formDate = new FormData(form);
+      
+      const cat = formDate.get('txtAddCat');
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/get/category/ajax",
+        data: {
+          cat: cat
+        },
+        success: function(){
+          alert('Added');
+          $('#txtCategory #opt_cat').remove();
+          category();
+        }
+      })
+    });
+
+    function brand(){
+      $.ajax({
+        type: 'GET',
+        headers: "application/json",
+        url: "http://127.0.0.1:5000/get/brand/ajax",
+        success: function(data){
+          $('#txtBrand').append(`
+            <option value="" disabled selected  id="opt_brand">Select Brand</option>
+          `);
+          for(var i = 0; i < data.length; i++){
+            var brand = data[i];
+
+            $('#txtBrand').append(`
+              <option value="${brand.brand_id}" id="opt_brand">${brand.brand_name}</option>
+            `);
+          }
+        }
+      });
+    }
+    brand();
+
+    $(document).on('submit', '#form-brand-add', function(e){
+      e.preventDefault();
+      const form = document.getElementById('form-brand-add');
+      const formData = new FormData(form)
+
+      const brand_data = formData.get('txtAddBrand');
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/get/brand/ajax",
+        data: {
+          brand_data: brand_data
+        },
+        success: function(){
+          alert('Added');
+          $('#txtBrand #opt_brand').remove();
+          brand();
+        }
+      })
+
+    });
+
+    
+
+    function location(){
+      $.ajax({
+        type: 'GET',
+        headers: "application/json",
+        url: "http://127.0.0.1:5000/get/location/ajax",
+        success: function(data){
+          $('#txtLocation').append(`
+            <option value="" disabled selected id="opt_loc">Select Location</option>
+          `);
+          for(var i = 0; i < data.length; i++){
+            var location = data[i];
+
+            $('#txtLocation').append(`
+              <option value="${location.loc_num}" id="opt_loc">${location.loc_name}</option>
+            `);
+          }
+        }
+      });
+    }
+    location();
+
+    $(document).on('submit', '#form-loc-add', function(e){
+      e.preventDefault();
+
+      const form = document.getElementById('form-loc-add');
+      const formData = new FormData(form);
+
+      const loc = formData.get('txtAddLocName');
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/get/location/ajax",
+        data: {
+          loc: loc
+        },
+        success: function(data){
+          alert("Added");
+          $('#txtLocation #opt_loc').remove();
+          location();
+        }
+      });
+    });
+
+    function department(){
+      $.ajax({
+        type: 'GET',
+        headers: "application/json",
+        url: "http://127.0.0.1:5000/get/department/ajax",
+        success: function(data){
+          $('#txtDepartment').append(`
+            <option value="" disabled selected id="opt_dept">Select Department</option>
+          `);
+          for(var i = 0; i < data.length; i++){
+            var department = data[i];
+
+            $('#txtDepartment').append(`
+              <option value="${department.dept_no}" id="opt_dept">${department.dept_name}</option>
+            `);
+          }
+        }
+      });
+    }
+    department();
+
+    $(document).on('submit', "#form-dept-add", function(e){
+      e.preventDefault();
+
+      const form = document.getElementById('form-dept-add');
+      const formData = new FormData(form);
+
+      const dept = formData.get('txtAddDeptName');
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/get/department/ajax",
+        data: {
+          dept: dept
+        },
+        success: function(data){
+          alert("Added");
+          $('#txtDepartment #opt_dept').remove();
+          department();
+        }
+      });
+    });
+
+  })
+
+</script>
+
+
+{% endblock %}

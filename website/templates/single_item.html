@@ -1,0 +1,87 @@
+{%extends "layouts/students.html"%} {% block title %}Item{% endblock %}
+{%block content%}
+
+
+    <!--<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">-->
+      
+    <div class="card container-md shadow-lg" style="background:white">
+        <div class = " card-header d-flex justify-content-between">
+            <div>
+                <h3>Borrowing...</h3>
+            </div>
+            <div>
+                <a href="{{url_for('auth.student_index_page')}}"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+                </button>
+                </a>
+            </div>
+        </div>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- <div class="col-6 d-flex justify-content-center align-items-center" style="height:50px;"> -->
+                        <div class="col d-flex justify-content-center align-items-center" style="height:fit-content; width: fit-content;">    
+                            <img class="img-fluid" src="{{url_for('static', filename='uploads/')}}{{item.IS_Pic}}" alt="">
+
+                        </div>
+
+                        <div class="col">
+                            <div class="text-start my-2">
+                                <h2 class="fw-light">{{item.IS_ItemName}}</h2>
+                                <span class="text-muted"><strong>Brand</strong>: {{item.Br_BrandName}}</span>
+                                <br>
+                                <span class="text-muted"><strong>Model</strong>: {{item.IS_Model}}</span>
+                                <br>
+                                <span class="text-muted"><strong>Description</strong>: {{item.IS_ItemDesc}}</span>
+                                <br>
+                                <span class="text-muted"><strong>Stock(s)</strong>: {{(item.IS_BegStock + item.AddStock + item.RetStock) - (item.DelStock + item.BorStock)}}</span>
+                                <br>
+                                <span class="text-muted"><strong>Condition</strong>: {{item.Condition}}</span>
+                                <br>
+                                <span class="text-muted"><Strong>Owner</Strong>: {{item.Name}}</span>
+                                <br>
+                                <span class="text-muted"><strong>Location</strong>: {{item.Loc_Name}}</span>
+                            </div>
+                            <hr>
+                            <div class="my-2">
+                                <div class="my-2">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Purpose of borrow:" id="purpose-of-borrow" style="height: 100px"></textarea>
+                                        <label for="purpose-of-borrow">Purpose of borrow:</label>
+                                    </div>
+                                </div>
+                                <div class="my-2">
+                                    <label class="form-label">Qty:</label>
+                                    <input type="number" name= "txtBQty" id= "txtBQty" value="1" min="1" max="50" class="form-control" style="width: 100px;">
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="chkAgreement" name ="chkAgreement">
+                                    <label class="form-check-label" for="chkAgreement">
+                                        By ticking, you are confirming that you have read, understand and agree to CTU <a href="">terms and conditions.</a>
+                                    </label>
+                                </div>
+                                <div class="my-3 d-grid">
+                                    <button type="submit" class="btn btn-success btnBorrow" disabled id="btnBorrow">Borrow</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>                     
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#chkAgreement").on('click',function(){
+                var checked_status = this.checked;
+                if (checked_status == true) {
+                    $("#btnBorrow").removeAttr("disabled");
+                }else {
+                    $("#btnBorrow").attr("disabled", "disabled");
+            }
+            });
+        });
+        
+        </script>
+
+{% endblock %}

@@ -1,0 +1,182 @@
+{%if session['user_type'] == 'Admin'%}
+    {%extends "layouts/admin.html"%}
+{%else%}
+    {%extends "layouts/owner.html"%}
+{%endif%}
+{% block title %}Item{% endblock %}
+{%block content%}
+
+<!-- MODALS -->
+                                 
+                                                
+<!-- End of Modal -->
+    
+
+        <!--
+        <div class="container-fluid">
+        -->
+        <div class="modal fade" id="add-category" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+            <div class="vh-100 row align-items-center">
+                <div class="col">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-md-8 col-lg-6 signup-animate">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <div class = "d-flex justify-content-between">
+                                        <div>
+                                            <h3>Edit Item</h3>
+                                        </div>
+                                        <div>
+                                            <a href="/admin/items/all"><button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                                            <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+                                            </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+        
+    
+                                    <form method="POST" enctype="multipart/form-data">
+
+                                        <div class="container">
+                                          <div class="row">
+                        
+                                            <div class="col">
+                                            <label for="txtSerial" class="form-label">Serial No.</label>
+                                            {%if item != 0%}
+                                            <input type="text" class="form-control" value="{{item.IS_SerialNo}}"
+                                            id="txtSerial" name = "txtSerial" placeholder="Enter S/N" style="width:300px;">
+                                            {%else%}
+                                            <input type="text" class="form-control" value="{{item.IS_SerialNo}}"
+                                            id="txtSerial" name = "txtSerial" placeholder="Enter S/N" style="width:300px;">
+                                            {%endif%}
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                <label for="txtItemName" class="form-label">Item Name</label>
+                                                <input type="text" class="form-control" required value="{{item.IS_ItemName}}"
+                                                id="txtItemName" name = "txtItemName" placeholder="Enter Item Name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                <textarea class="form-control" placeholder="Description" id="txtItemDesc"  name="txtItemDesc" style="height: 100px">{{item.IS_ItemDesc}}</textarea>
+                                                <br/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-4">
+                                              <label for="txtCategory" class="form-label">Category</label>
+                                              <select class= form-select  name="txtCategory" id="txtCategory">
+                                                
+                                                <option value="{{item.IS_CategoryNo}}" selected>{{item.Cat_Name}}</option>
+                                                {%for category in categories%}
+                                                <option value="{{category.Cat_ID}}">{{category.Cat_Name}}</option>
+                                                {%endfor%}
+                                                <!-- <option ><a data-bs-toggle="modal" data-bs-target="#add-category">Add New Category</a></option>
+                                                -->
+                                                <option><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#add-category"><i class="bi bi-plus-circle"></i>Add New</button></option>
+                                            </select> 
+            
+                                            </div>
+            
+                                            <div class="col-md-4">
+                                              <label for="txtBrand" class="form-label">Brand Name</label>
+                                              <select class= form-select name="txtBrand"  id="txtBrand" >
+                                                <option value="{{item.IS_Brand}}" selected>{{item.Br_BrandName}}</option>
+                                                {%for brand in brands%}
+                                                <option value="{{brand.Br_BrandID}}">{{brand.Br_BrandName}}</option>
+                                                {%endfor%}
+                                               
+                                              </select>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <label for="txtModel" class="form-label">Model</label>
+                                                <input type="text" id="txtModel" value="{{item.IS_Model}}" name="txtModel" class="form-control">
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-md-6">
+                                              <label for="txtLocation" class="form-label">Location</label>
+                                              <select class= form-select  name="txtLocation" id="txtLocation" >
+                                                <option value="{{item.IS_Location}}" selected>{{item.Loc_Name}} </option>
+                                                {%for location in locations%}
+                                                <option value="{{location.Loc_No}}">{{location.Loc_Name}}</option>
+                                                {%endfor%}
+                                              </select>
+                                            </div>
+    
+                                            <div class="col-md-6">
+                                                <label for="txtDepartment" class="form-label">Department</label>
+                                                <select class= form-select name="txtDepartment" id="txtDepartment" >
+                                                  <option value="{{item.IS_Department}}" selected>{{item.Dept_Name}}</option>
+                                                  {%for department in departments%}
+                                                <option value="{{department.Dept_No}}">{{department.Dept_Name}}</option>
+                                                {%endfor%}
+                                                </select>
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                  <label for="txtOwner" class="form-label">Owner</label>
+                                                  <select class= form-select name="txtOwner"  id="txtOwner" >
+                                                    <option value="{{item.IS_Owner}}" selected>{{item.UT_LastName + ', ' + item.UT_FirstName}}</option>
+                                                    {%for owner in users%}
+                                                    <option value="{{owner.UT_UserID}}">{{owner.UT_LastName + ', ' + owner.UT_FirstName}}</option>
+                                                    {%endfor%}
+                                                  </select>
+                                                </div>
+                                            </div>
+                                          <div class="row">
+                                      
+                                            <div class="col-md-4">
+                                              <label for="txtStocks" class="form-label">Initital Stock(s)</label>
+                                              <input type="number" id="txtStocks" disabled="true" value="{{item.IS_BegStock}}"  name="txtStocks" value="1" min="1" class="form-control" style="width: 100px;">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtCondition" class="form-label">Condition</label>
+                                                <select class= form-select name="txtCondition" id="txtCondition" >
+                                                    <option selected>{{item.IS_Condition}}</option>
+                                                    <option value="Good">Good</option>
+                                                    <option value="Defective">Defective</option>
+                                                    <option value="Not functional">Not functional</option>
+                                                  </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="txtUnit" class="form-label">Unit</label>
+                                                <select class= form-select name="txtUnit" value="{{item.IS_Unit}}" id="txtUnit" >
+                                                  <option selected>{{item.IS_Unit}}</option>
+                                                  <option value="box">Box</option>
+                                                  <option value="pc">Piece</option>
+                                                </select>
+                                            </div>
+                                          </div>
+                                          <br />
+                                          <div class="row">
+                                            <div class="col">
+                                              <label for="imgItem" class="form-label" >Upload Item image (PNG, JPG)</label>
+                                              <input class = "form-control" type="file" id="imgItem" name = "imgItem"
+                                              accept=".jpg, .jpeg, .png" style="width: 50%;">
+                                            </div>
+                  
+                                          </div>
+                         
+                  
+                                        <br />
+                                        <button type="submit" class="btn btn-success w-100">Submit</button>
+                                      </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+{% endblock %}

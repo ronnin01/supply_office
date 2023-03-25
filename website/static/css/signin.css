@@ -1,3 +1,15 @@
+body{
+    background-image: url("/static/images/body_background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h3{
+    color:rgb(17, 15, 2)
+}
+.special-card {
+      background: transparent;
+    }
 .signin-animate{
     animation: up 2s;
 }
