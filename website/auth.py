@@ -31,10 +31,10 @@ def signin():
                 session['userno'] = user.UT_UserID
                 session['user_image'] = user.UT_Pic
                 session['user_type'] = user.UT_UserType
-                if user.UT_UserType == "Borrower":
+                if user.UT_UserType == "Student":
                     return redirect(url_for('auth.student_index_page'))
                 else:
-                    return redirect(url_for('auth.admin_item_all'))
+                    return redirect(url_for('auth.admin_dashboard'))
             else:
                 flash("Incorrect Password", category='error')
         else:
@@ -402,8 +402,7 @@ def admin_item_all():
         
     item = cur.fetchall()
 
-    cur.execute("Select (UT_FirstName + ' ' + UT_LastName) as Name, UT_Pic, IS_ItemName from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '0' AND IS_Owner = ?",(session['userno']))
-    
+    cur.execute("Select TD_TransN, (UT_FirstName + ' ' + UT_LastName) as Name, UT_Pic, IS_ItemName from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '0' AND IS_Owner = ?",(session['userno']))
     Notification = cur.fetchall()
     
     cur.execute("Select (count(IS_ItemNo)) as cntItem from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '0' AND IS_Owner = ?",(session['userno']))
@@ -541,8 +540,8 @@ def delstock():
         return redirect(url_for('auth.admin_item_entry'))
     
 
-@auth.route('/singleitem/<string:id_data>', methods=['GET', 'POST'])
-def singleitem(id_data):
+@auth.route('/singleitem', methods=['GET', 'POST'])
+def singleitem():
     if 'email' not in session:
         flash('Please login first', category='error')
         return redirect(url_for('auth.signin'))
@@ -558,7 +557,7 @@ def singleitem(id_data):
     left join Location on ItemSetup.IS_Location = Location.Loc_No \
     left join Department on ItemSetup.IS_Department = Department.Dept_No \
     left join Usertable on ItemSetup.IS_Owner = Usertable.UT_UserID \
-    where IS_ItemNo = " + id_data )
+    where IS_ItemNo = " + request.form.get('item_id') )
     item = cur.fetchone()
     
     if request.method == 'POST':
@@ -569,11 +568,11 @@ def singleitem(id_data):
         else:
             THNo = 1
         userno = session['userno']
-        cur.execute("INSERT INTO TransHeader(TH_ID, TH_UserNo, TH_TransDate) VALUES(?,?,GETDATE())", (THNo, userno))
+        cur.execute("INSERT INTO TransHeader(TH_UserNo, TH_TransDate) VALUES(?,GETDATE())", (userno))
         conn.commit()
         ItemNo = request.form.get('txtBItemNo')
         Qty = request.form.get('txtBQty')
-        cur.execute("INSERT INTO TransDetail(TD_THNo, TD_ItemNo, TD_Qty, TD_DateBorrowed, TD_Status) VALUES(?,?,?,GETDATE(),0)", (THNo, id_data, Qty ))
+        cur.execute("INSERT INTO TransDetail(TD_THNo, TD_ItemNo, TD_Qty, TD_DateBorrowed, TD_Status, TD_Receivedby) VALUES(?,?,?,GETDATE(),0,1)", (THNo, request.form.get('item_id'), request.form.get('item_quantity') ))
         conn.commit()
         if th:
             cur.execute("Update LastTH set TH_No = ?", THNo)
@@ -582,9 +581,11 @@ def singleitem(id_data):
             cur.execute("INSERT INTO LastTH(TH_No) VALUES(?)", (THNo))
             conn.commit()
         conn.close()
-                #db.connection.commit()
-        flash("Item Borrowed successfully. Please wait for the response of the owner.", category="success")
-        return redirect(url_for('auth.student_index_page'))
+            #db.connection.commit()
+        
+        return jsonify({
+            "message": "Item Borrowed Successfully."
+        })  
 
     
     return render_template('single_item.html', item = item)
@@ -605,6 +606,10 @@ def add_user_owner():
     department = cur.fetchall()
     return render_template('adminowneruser.html', designations = designation, departments = department)
 
+@auth.route('/admin/dashboard')
+def admin_dashboard():
+
+    return render_template('dashboard.html')
 
 # GET BRAND AJAX
 @auth.route('/get/brand/ajax', methods=['GET', 'POST'])
@@ -782,3 +787,100 @@ def get_on_search_data_items():
 
         conn.commit()
         return jsonify(data)
+
+@auth.route('/get/borrows/notifications', methods=['GET'])
+def get_borrows_notifications():
+    conn = connection()
+    cur = conn.cursor()
+
+    cur.execute("Select TD_TransN, (UT_FirstName + ' ' + UT_LastName) as Name, UT_Pic, IS_ItemName from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '0' AND IS_Owner = ?",(session['userno']))
+    Notification = cur.fetchall()
+
+    data = []
+
+    for notif in Notification:
+        datas = {
+            "td_transn": notif.TD_TransN,
+            "name": notif.Name,
+            "ut_pic": notif.UT_Pic,
+            "is_itemname": notif.IS_ItemName
+        }
+        data.append(datas)
+
+    return jsonify(data)
+
+@auth.route('/approve/borrow', methods=['POST'])
+def approved_borrow():
+    if request.method == "POST":
+        conn = connection()
+        cur = conn.cursor()
+
+        cur.execute("UPDATE TransDetail set TD_Status = 6 WHERE TD_TransN = ?", (request.form.get('trans_id')))
+
+        conn.commit()
+
+        return jsonify({"message": "You approved the borrow."})
+
+@auth.route("/decline/borrow", methods=['POST'])
+def declined_borrow():
+    if request.method == "POST":
+        conn = connection()
+        cur = conn.cursor()
+
+        cur.execute("UPDATE TransDetail set TD_Status = 7 WHERE TD_TransN = ?", (request.form.get('trans_id')))
+
+        conn.commit()
+
+        return jsonify({"message": "You declined the borrow."})
+
+# TOTAL USERS HEADER AJAX()
+@auth.route('/total/users/header/ajax', methods=['GET'])
+def total_users_header_ajax():
+    conn = connection()
+    cur = conn.cursor()
+    
+    cur.execute("SELECT (COUNT(UT_UserID)) as counted_user FROM UserTable")
+    total_users = cur.fetchone()
+
+    return jsonify({
+        "total_user": total_users.counted_user
+    })
+
+# TOTAL UNRETURNED ITEMS HEADER AJAX
+@auth.route('/total/unreturned/items/header/ajax', methods=['GET'])
+def total_unreturned_items_ajax():
+    conn = connection()
+    cur = conn.cursor()
+    
+    cur.execute("Select (count(TD_TransN)) as counted_items from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '6'")
+    total_unreturned_items = cur.fetchone()
+
+    return jsonify({
+        "total_unreturned_item": total_unreturned_items.counted_items
+    })
+
+# TOTAL PENDING ITEMS HEADER AJAX
+@auth.route('/total/pending/items/header/ajax', methods=['GET'])
+def total_pending_items_header_ajax():
+    conn = connection()
+    cur = conn.cursor()
+    
+    cur.execute("Select (count(TD_TransN)) as counted_items from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '0'")
+    total_pending_items = cur.fetchone()
+
+    return jsonify({
+        "total_pending_item": total_pending_items.counted_items
+    })
+
+# TOTAL DECLINED ITEMS
+@auth.route("/total/declined/items/header/ajax", methods=['GET'])
+def total_declined_items_header_ajax():
+    conn = connection()
+    cur = conn.cursor()
+    
+    cur.execute("Select (count(TD_TransN)) as counted_items from TransDetail left join TransHeader on TransDetail.TD_THNO = TransHeader.TH_ID left join ItemSetup on TransDetail.TD_ItemNo = ItemSetup.IS_ItemNo left Join UserTable on TransHeader.TH_UserNo = UserTable.UT_UserID where TD_Status = '7'")
+    total_declined_items = cur.fetchone()
+
+    return jsonify({
+        "total_declined_item": total_declined_items.counted_items
+    })

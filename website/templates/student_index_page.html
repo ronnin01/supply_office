@@ -114,14 +114,27 @@
 
 <script>
 $(document).ready(function() {
-    $("#chkAgreement").on('change',function(){
-        var checked_status = this.checked;
-        if (checked_status == true) {
-            $("#btnBorrow").removeAttr("disabled", true);
-        }else {
-            $("#btnBorrow").attr("disabled", "disabled");
-        }
+
+    $(document).on('click', '#btnBorrow', function(){
+        var item_id = $('#item-id').val();
+        var purpose_of_borrow = $('#purpose-of-borrow').val();
+        var item_quantity = $('#item-quantity').val();
+
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:5000/singleitem",
+            data: {
+                item_id: item_id,
+                purpose_of_borrow: purpose_of_borrow,
+                item_quantity: item_quantity
+            },
+            success: function(data){
+                alert(data.message);
+                location.reload();
+            }
+        });
     });
+
 
     $(document).on('click', "#item_modal", function(){
         $.ajax({
@@ -156,15 +169,16 @@ $(document).ready(function() {
                             </div>
                             <hr>
                             <div class="my-2">
+                                <input type="hidden" id="item-id" value="${data[0].is_itemno}">
                                 <div class="my-2">
                                     <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Purpose of borrow."               id="purpose-of-borrow" style="height: 100px"></textarea>
+                                        <textarea class="form-control" placeholder="Purpose of borrow." id="purpose-of-borrow" style="height: 100px"></textarea>
                                         <label for="purpose-of-borrow">Purpose of borrow</label>
                                     </div>
                                 </div>
                                 <div class="my-2">
                                     <label class="form-label">Qty:</label>
-                                    <input type="number" value="1" min="1" max="5" class="form-control" style="width: 100px;">
+                                    <input type="number" value="1" min="1" max="5" class="form-control" style="width: 100px;" id="item-quantity">
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="chkAgreement" name ="chkAgreement">
@@ -173,7 +187,7 @@ $(document).ready(function() {
                                     </label>
                                 </div>
                                 <div class="my-3 d-grid">
-                                    <button class="btn btn-success btnBorrow" disabled id="btnBorrow">Borrow</button>
+                                    <button class="btn btn-success btnBorrow" id="btnBorrow">Borrow</button>
                                 </div>
                             </div>
                         </div>

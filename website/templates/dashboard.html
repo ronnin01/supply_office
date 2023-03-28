@@ -1,0 +1,86 @@
+{%if session['user_type'] == 'Admin'%}
+    {%extends "layouts/admin.html"%}
+{%else%}
+    {%extends "layouts/owner.html"%}
+{%endif%}
+{% block title %}Item{% endblock %}
+{%block content%}
+
+    <div class="containerp-flud px-5 my-2">
+        <div class="row justify-content-between my-2 g-md-3 g-2">
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body d-flex align-items-center justify-content-around">
+                        <i class="bi bi-people-fill text-danger" style="font-size: 3rem;"></i>
+                        <div class="text-center">
+                            <h3>Total Users</h3>
+                            <h1 id="total_user_number"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body d-flex align-items-center justify-content-around">
+                        <i class="bi bi-box-seam-fill text-danger" style="font-size: 3rem;"></i>
+                        <div class="text-center">
+                            <h3>Unreturned</h3>
+                            <h1 id="total_unreturned_items"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body d-flex align-items-center justify-content-around">
+                        <i class="bi bi-exclamation-diamond-fill text-danger" style="font-size: 3rem;"></i>
+                        <div class="text-center">
+                            <h3>Pending</h3>
+                            <h1 id="total_pending_items"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body d-flex align-items-center justify-content-around">
+                        <i class="bi bi-slash-circle-fill text-danger" style="font-size: 3rem;"></i>
+                        <div class="text-center">
+                            <h3>Delined Items</h3>
+                            <h1 id="total_declined_items"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-between my-4">
+            <div class="col">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body">
+                        <div class="my-2 text-start">
+                            <h2 class="fw-light">Weekly Borrowed Items</h2>
+                        </div>
+                        <hr>
+                        <div class="my-2">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card shadow" style="border-top: 2px solid red;">
+                    <div class="card-body">
+                        <div class="my-2 text-start">
+                            <h2 class="fw-light">Top Borrowed Items</h2>
+                        </div>
+                        <hr>
+                        <div class="my-2">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
